@@ -14,7 +14,241 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      barbers: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          shop_id: string
+          specialties: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          shop_id: string
+          specialties?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          shop_id?: string
+          specialties?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barbers_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          barber_id: string
+          client_name: string
+          id: string
+          paid_at: string
+          queue_entry_id: string | null
+          service_name: string
+          shop_id: string
+        }
+        Insert: {
+          amount?: number
+          barber_id: string
+          client_name: string
+          id?: string
+          paid_at?: string
+          queue_entry_id?: string | null
+          service_name: string
+          shop_id: string
+        }
+        Update: {
+          amount?: number
+          barber_id?: string
+          client_name?: string
+          id?: string
+          paid_at?: string
+          queue_entry_id?: string | null
+          service_name?: string
+          shop_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_queue_entry_id_fkey"
+            columns: ["queue_entry_id"]
+            isOneToOne: false
+            referencedRelation: "queue_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      queue_entries: {
+        Row: {
+          barber_id: string
+          called_at: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          done_at: string | null
+          id: string
+          position: number
+          service_id: string | null
+          shop_id: string
+          status: string
+        }
+        Insert: {
+          barber_id: string
+          called_at?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          done_at?: string | null
+          id?: string
+          position?: number
+          service_id?: string | null
+          shop_id: string
+          status?: string
+        }
+        Update: {
+          barber_id?: string
+          called_at?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          done_at?: string | null
+          id?: string
+          position?: number
+          service_id?: string | null
+          shop_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "queue_entries_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "queue_entries_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "queue_entries_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          barber_id: string | null
+          created_at: string
+          duration_minutes: number
+          id: string
+          name: string
+          price: number
+          shop_id: string
+        }
+        Insert: {
+          barber_id?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          name: string
+          price?: number
+          shop_id: string
+        }
+        Update: {
+          barber_id?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          name?: string
+          price?: number
+          shop_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "services_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shops: {
+        Row: {
+          address: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_open: boolean
+          name: string
+          opening_hours: string | null
+          owner_id: string
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_open?: boolean
+          name: string
+          opening_hours?: string | null
+          owner_id: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_open?: boolean
+          name?: string
+          opening_hours?: string | null
+          owner_id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
