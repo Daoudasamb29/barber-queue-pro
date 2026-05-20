@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BarberRegisterRouteImport } from './routes/barber.register'
+import { Route as BarberLoginRouteImport } from './routes/barber.login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BarberRegisterRoute = BarberRegisterRouteImport.update({
+  id: '/barber/register',
+  path: '/barber/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BarberLoginRoute = BarberLoginRouteImport.update({
+  id: '/barber/login',
+  path: '/barber/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/barber/login': typeof BarberLoginRoute
+  '/barber/register': typeof BarberRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/barber/login': typeof BarberLoginRoute
+  '/barber/register': typeof BarberRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/barber/login': typeof BarberLoginRoute
+  '/barber/register': typeof BarberRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/barber/login' | '/barber/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/barber/login' | '/barber/register'
+  id: '__root__' | '/' | '/barber/login' | '/barber/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BarberLoginRoute: typeof BarberLoginRoute
+  BarberRegisterRoute: typeof BarberRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,12 +68,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/barber/register': {
+      id: '/barber/register'
+      path: '/barber/register'
+      fullPath: '/barber/register'
+      preLoaderRoute: typeof BarberRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/barber/login': {
+      id: '/barber/login'
+      path: '/barber/login'
+      fullPath: '/barber/login'
+      preLoaderRoute: typeof BarberLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BarberLoginRoute: BarberLoginRoute,
+  BarberRegisterRoute: BarberRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
