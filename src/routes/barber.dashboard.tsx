@@ -27,7 +27,7 @@ type Barber = { id: string; name: string };
 function Dashboard() {
   const { user, loading } = useAuth();
   const nav = useNavigate();
-  const [shopId, setShopId] = useState<string | null>(null);
+  const [, setShopId] = useState<string | null>(null);
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [selectedBarber, setSelectedBarber] = useState<string | null>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
