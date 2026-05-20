@@ -10,12 +10,33 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TicketTicketIdRouteImport } from './routes/ticket.$ticketId'
+import { Route as ShopShopIdRouteImport } from './routes/shop.$shopId'
+import { Route as BarberSetupRouteImport } from './routes/barber.setup'
 import { Route as BarberRegisterRouteImport } from './routes/barber.register'
 import { Route as BarberLoginRouteImport } from './routes/barber.login'
+import { Route as BarberDashboardRouteImport } from './routes/barber.dashboard'
+import { Route as BarberAccountingRouteImport } from './routes/barber.accounting'
+import { Route as ShopShopIdJoinBarberIdRouteImport } from './routes/shop.$shopId.join.$barberId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TicketTicketIdRoute = TicketTicketIdRouteImport.update({
+  id: '/ticket/$ticketId',
+  path: '/ticket/$ticketId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopShopIdRoute = ShopShopIdRouteImport.update({
+  id: '/shop/$shopId',
+  path: '/shop/$shopId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BarberSetupRoute = BarberSetupRouteImport.update({
+  id: '/barber/setup',
+  path: '/barber/setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BarberRegisterRoute = BarberRegisterRouteImport.update({
@@ -28,35 +49,101 @@ const BarberLoginRoute = BarberLoginRouteImport.update({
   path: '/barber/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BarberDashboardRoute = BarberDashboardRouteImport.update({
+  id: '/barber/dashboard',
+  path: '/barber/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BarberAccountingRoute = BarberAccountingRouteImport.update({
+  id: '/barber/accounting',
+  path: '/barber/accounting',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopShopIdJoinBarberIdRoute = ShopShopIdJoinBarberIdRouteImport.update({
+  id: '/join/$barberId',
+  path: '/join/$barberId',
+  getParentRoute: () => ShopShopIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/barber/accounting': typeof BarberAccountingRoute
+  '/barber/dashboard': typeof BarberDashboardRoute
   '/barber/login': typeof BarberLoginRoute
   '/barber/register': typeof BarberRegisterRoute
+  '/barber/setup': typeof BarberSetupRoute
+  '/shop/$shopId': typeof ShopShopIdRouteWithChildren
+  '/ticket/$ticketId': typeof TicketTicketIdRoute
+  '/shop/$shopId/join/$barberId': typeof ShopShopIdJoinBarberIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/barber/accounting': typeof BarberAccountingRoute
+  '/barber/dashboard': typeof BarberDashboardRoute
   '/barber/login': typeof BarberLoginRoute
   '/barber/register': typeof BarberRegisterRoute
+  '/barber/setup': typeof BarberSetupRoute
+  '/shop/$shopId': typeof ShopShopIdRouteWithChildren
+  '/ticket/$ticketId': typeof TicketTicketIdRoute
+  '/shop/$shopId/join/$barberId': typeof ShopShopIdJoinBarberIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/barber/accounting': typeof BarberAccountingRoute
+  '/barber/dashboard': typeof BarberDashboardRoute
   '/barber/login': typeof BarberLoginRoute
   '/barber/register': typeof BarberRegisterRoute
+  '/barber/setup': typeof BarberSetupRoute
+  '/shop/$shopId': typeof ShopShopIdRouteWithChildren
+  '/ticket/$ticketId': typeof TicketTicketIdRoute
+  '/shop/$shopId/join/$barberId': typeof ShopShopIdJoinBarberIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/barber/login' | '/barber/register'
+  fullPaths:
+    | '/'
+    | '/barber/accounting'
+    | '/barber/dashboard'
+    | '/barber/login'
+    | '/barber/register'
+    | '/barber/setup'
+    | '/shop/$shopId'
+    | '/ticket/$ticketId'
+    | '/shop/$shopId/join/$barberId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/barber/login' | '/barber/register'
-  id: '__root__' | '/' | '/barber/login' | '/barber/register'
+  to:
+    | '/'
+    | '/barber/accounting'
+    | '/barber/dashboard'
+    | '/barber/login'
+    | '/barber/register'
+    | '/barber/setup'
+    | '/shop/$shopId'
+    | '/ticket/$ticketId'
+    | '/shop/$shopId/join/$barberId'
+  id:
+    | '__root__'
+    | '/'
+    | '/barber/accounting'
+    | '/barber/dashboard'
+    | '/barber/login'
+    | '/barber/register'
+    | '/barber/setup'
+    | '/shop/$shopId'
+    | '/ticket/$ticketId'
+    | '/shop/$shopId/join/$barberId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BarberAccountingRoute: typeof BarberAccountingRoute
+  BarberDashboardRoute: typeof BarberDashboardRoute
   BarberLoginRoute: typeof BarberLoginRoute
   BarberRegisterRoute: typeof BarberRegisterRoute
+  BarberSetupRoute: typeof BarberSetupRoute
+  ShopShopIdRoute: typeof ShopShopIdRouteWithChildren
+  TicketTicketIdRoute: typeof TicketTicketIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +153,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ticket/$ticketId': {
+      id: '/ticket/$ticketId'
+      path: '/ticket/$ticketId'
+      fullPath: '/ticket/$ticketId'
+      preLoaderRoute: typeof TicketTicketIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop/$shopId': {
+      id: '/shop/$shopId'
+      path: '/shop/$shopId'
+      fullPath: '/shop/$shopId'
+      preLoaderRoute: typeof ShopShopIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/barber/setup': {
+      id: '/barber/setup'
+      path: '/barber/setup'
+      fullPath: '/barber/setup'
+      preLoaderRoute: typeof BarberSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/barber/register': {
@@ -82,13 +190,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BarberLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/barber/dashboard': {
+      id: '/barber/dashboard'
+      path: '/barber/dashboard'
+      fullPath: '/barber/dashboard'
+      preLoaderRoute: typeof BarberDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/barber/accounting': {
+      id: '/barber/accounting'
+      path: '/barber/accounting'
+      fullPath: '/barber/accounting'
+      preLoaderRoute: typeof BarberAccountingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop/$shopId/join/$barberId': {
+      id: '/shop/$shopId/join/$barberId'
+      path: '/join/$barberId'
+      fullPath: '/shop/$shopId/join/$barberId'
+      preLoaderRoute: typeof ShopShopIdJoinBarberIdRouteImport
+      parentRoute: typeof ShopShopIdRoute
+    }
   }
 }
 
+interface ShopShopIdRouteChildren {
+  ShopShopIdJoinBarberIdRoute: typeof ShopShopIdJoinBarberIdRoute
+}
+
+const ShopShopIdRouteChildren: ShopShopIdRouteChildren = {
+  ShopShopIdJoinBarberIdRoute: ShopShopIdJoinBarberIdRoute,
+}
+
+const ShopShopIdRouteWithChildren = ShopShopIdRoute._addFileChildren(
+  ShopShopIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BarberAccountingRoute: BarberAccountingRoute,
+  BarberDashboardRoute: BarberDashboardRoute,
   BarberLoginRoute: BarberLoginRoute,
   BarberRegisterRoute: BarberRegisterRoute,
+  BarberSetupRoute: BarberSetupRoute,
+  ShopShopIdRoute: ShopShopIdRouteWithChildren,
+  TicketTicketIdRoute: TicketTicketIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
