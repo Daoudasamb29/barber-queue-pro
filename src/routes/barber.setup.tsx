@@ -3,9 +3,12 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { BarberHeader, BarberTabs } from "@/components/BarberHeader";
-import { QRCodeSVG } from "qrcode.react";
-import { Trash2, Plus } from "lucide-react";
+import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
+import { Trash2, Plus, Download, FileText } from "lucide-react";
 import { formatFCFA } from "@/lib/queue";
+import { useRef } from "react";
+import jsPDF from "jspdf";
+
 
 export const Route = createFileRoute("/barber/setup")({
   head: () => ({ meta: [{ title: "Boutique — Barber_Pro" }] }),
@@ -95,6 +98,50 @@ function Setup() {
   }
 
   const shopUrl = typeof window !== "undefined" ? `${window.location.origin}/shop/${shop.id}` : "";
+  const hiddenQrRef = useRef<HTMLDivElement | null>(null);
+
+  function getQrDataUrl(): string | null {
+    const canvas = hiddenQrRef.current?.querySelector("canvas") as HTMLCanvasElement | null;
+    return canvas ? canvas.toDataURL("image/png") : null;
+  }
+
+  function downloadPng() {
+    const url = getQrDataUrl();
+    if (!url) return;
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${shop?.name || "barber"}-qr.png`;
+    a.click();
+  }
+
+  function downloadPdf() {
+    const url = getQrDataUrl();
+    if (!url || !shop) return;
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(28);
+    doc.text("Barber_Pro", pageW / 2, 25, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(18);
+    doc.text(shop.name, pageW / 2, 40, { align: "center" });
+
+    const qrSize = 120;
+    doc.addImage(url, "PNG", (pageW - qrSize) / 2, 60, qrSize, qrSize);
+
+    doc.setFontSize(14);
+    doc.text("Scannez pour rejoindre la file d'attente", pageW / 2, 200, { align: "center" });
+
+    if (shop.address) {
+      doc.setFontSize(11);
+      doc.text(shop.address, pageW / 2, pageH - 20, { align: "center" });
+    }
+
+    doc.save(`${shop.name}-qr.pdf`);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -106,10 +153,25 @@ function Setup() {
         <div className="bg-card border rounded-2xl p-5 text-center">
           <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">QR code client</div>
           <div className="bg-white p-4 rounded-2xl inline-block">
-            <QRCodeSVG value={shopUrl} size={160} />
+            <QRCodeSVG value={shopUrl} size={160} level="H" />
           </div>
           <div className="text-xs text-muted-foreground mt-3 break-all">{shopUrl}</div>
+          <div className="grid grid-cols-2 gap-2 mt-4">
+            <button onClick={downloadPng}
+              className="flex items-center justify-center gap-2 bg-primary text-primary-foreground py-2.5 rounded-2xl text-sm font-medium">
+              <Download size={14} /> PNG
+            </button>
+            <button onClick={downloadPdf}
+              className="flex items-center justify-center gap-2 bg-background border py-2.5 rounded-2xl text-sm font-medium">
+              <FileText size={14} /> PDF
+            </button>
+          </div>
+          {/* Hidden high-res canvas for export */}
+          <div ref={hiddenQrRef} style={{ position: "absolute", left: -99999, top: -99999 }}>
+            <QRCodeCanvas value={shopUrl} size={1000} level="H" includeMargin />
+          </div>
         </div>
+
 
         {/* Shop info */}
         <div className="bg-card border rounded-2xl p-5 space-y-3">

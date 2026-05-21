@@ -71,7 +71,7 @@ function ShopPublic() {
         <div className="text-xs uppercase tracking-wider text-muted-foreground px-1">Choisis un barbier</div>
         {barbers.map(b => (
           <Link key={b.id} to="/shop/$shopId/join/$barberId" params={{ shopId, barberId: b.id }}
-            className="bg-card border rounded-2xl p-4 flex items-center gap-3">
+            className="bg-card border rounded-2xl p-4 flex items-center gap-3 cursor-pointer hover:border-primary transition-colors active:scale-[0.99]">
             <div className="w-11 h-11 bg-primary text-primary-foreground rounded-2xl grid place-items-center text-sm font-medium">
               {b.name.slice(0, 2).toUpperCase()}
             </div>

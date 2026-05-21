@@ -10,10 +10,12 @@ export const Route = createFileRoute("/shop/$shopId/join/$barberId")({
 
 type Service = { id: string; name: string; price: number; duration_minutes: number; barber_id: string | null };
 type Barber = { id: string; name: string };
+type Shop = { id: string; name: string };
 
 function JoinPage() {
   const { shopId, barberId } = Route.useParams();
   const nav = useNavigate();
+  const [shop, setShop] = useState<Shop | null>(null);
   const [barber, setBarber] = useState<Barber | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [serviceId, setServiceId] = useState<string>("");
@@ -24,6 +26,8 @@ function JoinPage() {
 
   useEffect(() => {
     (async () => {
+      const { data: sh } = await supabase.from("shops").select("id,name").eq("id", shopId).maybeSingle();
+      setShop(sh as Shop | null);
       const { data: b } = await supabase.from("barbers").select("id,name").eq("id", barberId).maybeSingle();
       setBarber(b as Barber | null);
       const { data: svcs } = await supabase.from("services").select("*").eq("shop_id", shopId).or(`barber_id.eq.${barberId},barber_id.is.null`);
@@ -31,6 +35,7 @@ function JoinPage() {
       if (svcs?.[0]) setServiceId(svcs[0].id);
     })();
   }, [shopId, barberId]);
+
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -53,9 +58,12 @@ function JoinPage() {
         <div className="max-w-md mx-auto">
           <Link to="/shop/$shopId" params={{ shopId }} className="text-xs text-white/60">← Retour</Link>
           <h1 className="text-lg font-semibold mt-1">Rejoindre la file</h1>
-          {barber && <div className="text-xs text-white/60">avec {barber.name}</div>}
+          <div className="text-xs text-white/60">
+            {shop?.name}{barber ? ` · avec ${barber.name}` : ""}
+          </div>
         </div>
       </header>
+
 
       <main className="p-5 max-w-md mx-auto">
         <form onSubmit={submit} className="space-y-4">
