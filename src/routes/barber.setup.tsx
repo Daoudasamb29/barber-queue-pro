@@ -3,9 +3,12 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { BarberHeader, BarberTabs } from "@/components/BarberHeader";
-import { QRCodeSVG } from "qrcode.react";
-import { Trash2, Plus } from "lucide-react";
+import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
+import { Trash2, Plus, Download, FileText } from "lucide-react";
 import { formatFCFA } from "@/lib/queue";
+import { useRef } from "react";
+import jsPDF from "jspdf";
+
 
 export const Route = createFileRoute("/barber/setup")({
   head: () => ({ meta: [{ title: "Boutique — Barber_Pro" }] }),
