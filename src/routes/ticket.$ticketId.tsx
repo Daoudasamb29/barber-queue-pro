@@ -98,9 +98,10 @@ function Ticket() {
           ) : isYourTurn ? (
             <>
               <div className="text-[11px] uppercase tracking-widest text-[color:var(--success)] mb-2">À toi !</div>
-              <div className="text-4xl font-semibold">C'est ton tour</div>
+              <div className="text-4xl font-semibold">C'est ton tour !</div>
               <p className="text-sm text-muted-foreground mt-2">Présente-toi au barbier.</p>
             </>
+
           ) : (
             <>
               <div className="text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Position</div>
