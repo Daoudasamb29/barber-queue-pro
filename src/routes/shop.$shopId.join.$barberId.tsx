@@ -58,9 +58,12 @@ function JoinPage() {
         <div className="max-w-md mx-auto">
           <Link to="/shop/$shopId" params={{ shopId }} className="text-xs text-white/60">← Retour</Link>
           <h1 className="text-lg font-semibold mt-1">Rejoindre la file</h1>
-          {barber && <div className="text-xs text-white/60">avec {barber.name}</div>}
+          <div className="text-xs text-white/60">
+            {shop?.name}{barber ? ` · avec ${barber.name}` : ""}
+          </div>
         </div>
       </header>
+
 
       <main className="p-5 max-w-md mx-auto">
         <form onSubmit={submit} className="space-y-4">
