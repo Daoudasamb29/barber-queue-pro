@@ -1,12 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { BarberHeader, BarberTabs } from "@/components/BarberHeader";
 import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
 import { Trash2, Plus, Download, FileText } from "lucide-react";
 import { formatFCFA } from "@/lib/queue";
-import { useRef } from "react";
 import jsPDF from "jspdf";
 
 
@@ -28,6 +27,7 @@ function Setup() {
   const [name, setName] = useState("");
   const [newBarber, setNewBarber] = useState("");
   const [newSvc, setNewSvc] = useState({ name: "", price: 0, duration_minutes: 30, barber_id: "" });
+  const hiddenQrRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => { if (!loading && !user) nav({ to: "/barber/login" }); }, [loading, user, nav]);
 
@@ -98,7 +98,6 @@ function Setup() {
   }
 
   const shopUrl = typeof window !== "undefined" ? `${window.location.origin}/shop/${shop.id}` : "";
-  const hiddenQrRef = useRef<HTMLDivElement | null>(null);
 
   function getQrDataUrl(): string | null {
     const canvas = hiddenQrRef.current?.querySelector("canvas") as HTMLCanvasElement | null;
