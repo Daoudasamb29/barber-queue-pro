@@ -86,9 +86,10 @@ function Ticket() {
         <div className="p-6 text-center">
           {isDone ? (
             <>
-              <div className="text-3xl font-semibold">Merci !</div>
+              <div className="text-3xl font-semibold">Merci, à bientôt !</div>
               <p className="text-sm text-muted-foreground mt-2">Ton service est terminé.</p>
             </>
+
           ) : isCancelled ? (
             <>
               <div className="text-2xl font-semibold">Ticket annulé</div>
